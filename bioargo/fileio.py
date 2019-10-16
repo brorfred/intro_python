@@ -8,7 +8,7 @@ BIOARGO_VARLIST = ["chl_smooth",  "aou", "doxy", "bbp700_corr_smooth",
                    "Kd", "ocr", "bbp_slope_smooth", "bbp532_corr_smooth",
                    "S", "T", "bbp700_corr", "bbp532_corr"]
    
-def read_variable(float_no="lovbio014b", varname="chl_smooth"):
+def read_variable(float_no="lovbio014b", datadir="./", varname="chl_smooth"):
     """read variable from bioargo .dat file
     Read data from a bioargo data file.
 
@@ -18,6 +18,8 @@ def read_variable(float_no="lovbio014b", varname="chl_smooth"):
         Name of float
     varname: str
         Variable to read (will be included in file name)
+    datadir: str
+        Dir to look for datafiles
 
     Output
     ------
@@ -30,16 +32,16 @@ def read_variable(float_no="lovbio014b", varname="chl_smooth"):
     """
     if not varname in BIOARGO_VARLIST:
         raise NameError("varname not valid")
-    filename = f"{float_no}_xyz_{varname}.dat"
+    filename = f"{datadir}/{float_no}_xyz_{varname}.dat"
     if not os.path.isfile(filename):
         raise FileNotFoundError(f"The file '{filename}'' doesn't exist")
     time,depth,vals = np.loadtxt(filename, unpack=True, usecols=(0,1,2))
     time = time-366  #conversion between octave and python date
     return time,depth,vals
 
-def read_mld(float_no="lovbio014b", mldtype="mld"):
+def read_mld(float_no="lovbio014b", datadir="./", mldtype="mld"):
     """Read mld from bioargo .dat file"""
-    filename = f"{float_no}_mld.dat"
+    filename = f"{datadir}/{float_no}_mld.dat"
     mdict = {}
     time, mdict["mld"], mdict["010"], mdict["005"], mdict["001"] = np.loadtxt(filename, unpack=True, usecols=(0,1,2,3,4))
     time = time-366
