@@ -69,3 +69,5 @@ Backup[ ]of[ ]*.numbers/
 
 .tmux.conf
 .tramp_history
+.ipynb_checkpoints
+poetry.lock
